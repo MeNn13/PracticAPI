@@ -64,6 +64,7 @@ namespace Practic.Controllers
 
             context.Update(user);
             await context.SaveChangesAsync();
+
             return Ok(user);
         }
     }
