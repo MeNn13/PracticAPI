@@ -73,6 +73,8 @@ namespace Practic.Controllers
 
         #endregion
 
+        //Запросы Создание/Редактирование кабинета
+        #region
         [Route("crtEssCR")]
         [HttpPost]
         public async Task<ActionResult<Classroom>> AddEssCR (Classroom classroom)
@@ -90,13 +92,13 @@ namespace Practic.Controllers
 
         [Route("edtEssCR")]
         [HttpPut]
-        public async Task<ActionResult<User>> PutEssCR(Classroom classroom)
+        public async Task<ActionResult<Classroom>> PutEssCR(Classroom classroom)
         {
             if (classroom == null)
             {
                 return BadRequest();
             }
-            if (!context.Users.Any(x => x.Id == classroom.Id))
+            if (!context.classrooms.Any(x => x.Id == classroom.Id))
             {
                 return NotFound();
             }
@@ -106,5 +108,43 @@ namespace Practic.Controllers
 
             return Ok(classroom);
         }
+        #endregion
+
+        //Запросы Создание/Редактирование класса
+        #region
+        [Route("crtEssClass")]
+        [HttpPost]
+        public async Task<ActionResult<Class>> AddEssClass(Class @class)
+        {
+            if (@class == null)
+                return BadRequest();
+
+            if (context.classrooms.Any(x => x.Number == @class.Number))
+                return BadRequest(new { errorText = "Кабинет с таким номером существует" });
+
+            context.Classes.Add(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
+            await context.SaveChangesAsync();
+            return Ok(@class);
+        }
+
+        [Route("edtEssClass")]
+        [HttpPut]
+        public async Task<ActionResult<Class>> PutEssClass(Class @class)
+        {
+            if (@class == null)
+            {
+                return BadRequest();
+            }
+            if (!context.Classes.Any(x => x.Id == @class.Id))
+            {
+                return NotFound();
+            }
+
+            context.Update(@class);
+            await context.SaveChangesAsync();
+
+            return Ok(@class);
+        }
+        #endregion
     }
 }
