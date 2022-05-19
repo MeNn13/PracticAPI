@@ -119,8 +119,8 @@ namespace Practic.Controllers
             if (@class == null)
                 return BadRequest();
 
-            if (context.classrooms.Any(x => x.Number == @class.Number))
-                return BadRequest(new { errorText = "Кабинет с таким номером существует" });
+            if (context.Classes.Any(x => x.Number == @class.Number && x.Letter == @class.Letter))
+                return BadRequest(new { errorText = "Такой класс уже существует"});
 
             context.Classes.Add(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
             await context.SaveChangesAsync();
