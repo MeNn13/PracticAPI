@@ -87,5 +87,24 @@ namespace Practic.Controllers
             await context.SaveChangesAsync();
             return Ok(classroom);
         }
+
+        [Route("edtEssCR")]
+        [HttpPut]
+        public async Task<ActionResult<User>> PutEssCR(Classroom classroom)
+        {
+            if (classroom == null)
+            {
+                return BadRequest();
+            }
+            if (!context.Users.Any(x => x.Id == classroom.Id))
+            {
+                return NotFound();
+            }
+
+            context.Update(classroom);
+            await context.SaveChangesAsync();
+
+            return Ok(classroom);
+        }
     }
 }
