@@ -5,7 +5,7 @@ namespace Practic.Controllers
 {
     [Route("/")]
     [ApiController]
-    public class WelcomeController1 : ControllerBase
+    public class WelcomeController : ControllerBase
     {
         [HttpGet]
         public string Get()
