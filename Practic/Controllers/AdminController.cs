@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Practic.Models.User;
+using Practic.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,8 +13,8 @@ namespace Practic.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        UserContext context;
-        public AdminController(UserContext _context)
+        ApplicationContext context;
+        public AdminController(ApplicationContext _context)
         {
             context = _context;
         }

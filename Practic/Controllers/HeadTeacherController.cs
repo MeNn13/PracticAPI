@@ -27,6 +27,9 @@ namespace Practic.Controllers
             return Content("Создание пользователя('api/ht/crtUser'). Редактирование пользователя(api/ht/edtUser)");
         }
 
+        //Запросы Создание/Редактирование/Получение пользователей
+        #region
+
         [Route("all")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
@@ -36,7 +39,7 @@ namespace Practic.Controllers
 
         [Route("crtUser")]
         [HttpPost]
-        public async Task<ActionResult<User>> Add (User user)
+        public async Task<ActionResult<User>> AddUser (User user)
         {
             if (user == null)
                 return BadRequest();
@@ -51,7 +54,7 @@ namespace Practic.Controllers
 
         [Route("edtUser")]
         [HttpPut]
-        public async Task<ActionResult<User>> Put(User user)
+        public async Task<ActionResult<User>> PutUser (User user)
         {
             if (user == null)
             {
@@ -66,6 +69,23 @@ namespace Practic.Controllers
             await context.SaveChangesAsync();
 
             return Ok(user);
+        }
+
+        #endregion
+
+        [Route("crtEssCR")]
+        [HttpPost]
+        public async Task<ActionResult<Classroom>> AddEssCR (Classroom classroom)
+        {
+            if (classroom == null)
+                return BadRequest();
+
+            if (context.classrooms.Any(x => x.Number == classroom.Number))
+                return BadRequest(new { errorText = "Кабинет с таким номером существует" });
+
+            context.classrooms.Add(new Classroom { Id = Guid.NewGuid().ToString(), Number = classroom.Number});
+            await context.SaveChangesAsync();
+            return Ok(classroom);
         }
     }
 }
