@@ -27,7 +27,7 @@ namespace Practic.Controllers
             return Content("Создание пользователя('api/ht/crtUser'). Редактирование пользователя(api/ht/edtUser)");
         }
 
-        //Запросы Создание/Редактирование/Получение пользователей
+        //Запросы Создание/Редактирование/Получение/Удаление пользователей
         #region
 
         [Route("all")]
@@ -69,6 +69,23 @@ namespace Practic.Controllers
             await context.SaveChangesAsync();
 
             return Ok(user);
+        }
+
+        [Route("delUser")]
+        [HttpPost]
+        public async Task<IActionResult> Delete(User user)
+        {
+            if (user != null)
+            {
+                User us = await context.Users.FirstOrDefaultAsync(p => p.Id == user.Id);
+                if (us != null)
+                {
+                    context.Users.Remove(us);
+                    await context.SaveChangesAsync();
+                    return Ok(us);
+                }
+            }
+            return NotFound();
         }
 
         #endregion
@@ -146,5 +163,59 @@ namespace Practic.Controllers
             return Ok(@class);
         }
         #endregion
+
+        //Запросы Создание/Редактирование/Удаление предмета
+        #region
+        [Route("crtEssSub")]
+        [HttpPost]
+        public async Task<ActionResult<Subject>> AddEssSub(Subject subject)
+        {
+            if (subject == null)
+                return BadRequest();
+
+            if (context.subjects.Any(x => x.Name == subject.Name))
+                return BadRequest(new { errorText = "Такой класс уже существует" });
+
+            context.subjects.Add(new Subject { Id = Guid.NewGuid().ToString(), Name = subject.Name});
+            await context.SaveChangesAsync();
+            return Ok(subject);
+        }
+
+        [Route("edtEssSub")]
+        [HttpPut]
+        public async Task<ActionResult<Subject>> PutEssSub(Subject subject)
+        {
+            if (subject == null)
+            {
+                return BadRequest();
+            }
+            if (!context.Classes.Any(x => x.Id == subject.Id))
+            {
+                return NotFound();
+            }
+
+            context.Update(subject);
+            await context.SaveChangesAsync();
+
+            return Ok(subject);
+        }
+
+        [Route("delEssSub")]
+        [HttpPost]
+        public async Task<IActionResult> Delete(Subject sub)
+        {
+            if (sub != null)
+            {
+                Subject subject = await context.subjects.FirstOrDefaultAsync(p => p.Id == sub.Id);
+                if (subject != null)
+                {
+                    context.subjects.Remove(subject);
+                    await context.SaveChangesAsync();
+                    return Ok(subject);
+                }
+            }
+            return NotFound();
+        }
+        #endregion
     }
-}
+}   
