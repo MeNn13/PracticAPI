@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using Practic.Models.User;
+using Practic.Models;
 
 namespace Practic
 {
@@ -13,7 +13,7 @@ namespace Practic
         {
 
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            services.AddDbContext<UserContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
+            services.AddDbContext<ApplicationContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>

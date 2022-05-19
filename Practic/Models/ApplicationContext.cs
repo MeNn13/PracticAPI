@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Practic.Models.User
+namespace Practic.Models
 {
-    public class UserContext : DbContext
+    public class ApplicationContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public UserContext(DbContextOptions<UserContext> options) : base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
@@ -14,7 +14,7 @@ namespace Practic.Models.User
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
-                    new User { Id = Guid.NewGuid().ToString(), First_name = "Андрей", Midle_name = "Андреевич", Last_name = "Андреев", Login = "Admin", Password = "ad", Role = "Администратор"},
+                    new User { Id = Guid.NewGuid().ToString(), First_name = "Андрей", Midle_name = "Андреевич", Last_name = "Андреев", Login = "Admin", Password = "ad", Role = "Администратор" },
                     new User { Id = Guid.NewGuid().ToString(), First_name = "Сидор", Midle_name = "Сидорович", Last_name = "Сидоров", Login = "zav", Password = "12", Role = "Завуч" },
                     new User { Id = Guid.NewGuid().ToString(), First_name = "Наталья", Midle_name = "Николаевна", Last_name = "Владимирова", Login = "teach", Password = "tch", Role = "Учитель" },
                     new User { Id = Guid.NewGuid().ToString(), First_name = "Петр", Midle_name = "Петрович", Last_name = "Петров", Login = "Per", Password = "pr", Role = "Родитель" },

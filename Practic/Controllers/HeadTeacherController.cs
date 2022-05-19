@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Practic.Models.User;
+using Practic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Practic.Controllers
     [ApiController]
     public class HeadTeacherController : ControllerBase
     {
-        UserContext context;
-        public HeadTeacherController(UserContext _context)
+        ApplicationContext context;
+        public HeadTeacherController(ApplicationContext _context)
         {
             context = _context;
         }

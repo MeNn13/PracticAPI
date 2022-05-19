@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Practic.Models.User;
+using Practic.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,8 +14,8 @@ namespace Practic.Controllers
     [ApiController]
     public class JwtController : ControllerBase
     {
-        UserContext context;
-        public JwtController(UserContext _context)
+        ApplicationContext context;
+        public JwtController(ApplicationContext _context)
         {
             context = _context;
         }

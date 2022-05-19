@@ -1,4 +1,4 @@
-﻿namespace Practic.Models.User
+﻿namespace Practic.Models
 {
     public class User
     {
