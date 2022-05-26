@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Practic.Controllers
 {
     [Route("api/admin")]
-    [Authorize(Roles = "Администратор")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class AdminController : ControllerBase
     {

@@ -11,13 +11,6 @@ namespace Practic.Controllers
     [ApiController]
     public class WelcomeController : ControllerBase
     {
-        ApplicationContext context;
-
-        public WelcomeController (ApplicationContext _context)
-        {
-            context = _context;
-        }
-
         [HttpGet]
         public string Get()
         {

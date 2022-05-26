@@ -21,6 +21,8 @@ namespace Practic.Controllers
         IRepository<User> dbU;
         IRepository<Class> dbC;
         IRepository<Timetable> dbT;
+        IRepository<Subject> dbS;
+        IRepository<Classroom> dbCR;
         ApplicationContext context;
 
         public HeadTeacherController(ApplicationContext _context)
@@ -29,6 +31,8 @@ namespace Practic.Controllers
             dbU = new UserRepository(context);
             dbC = new ClassRepository(context);
             dbT = new TimetableRepository(context);
+            dbS = new SubjectRepository(context);
+            dbCR = new ClassroomRepository(context);
         }
 
         [HttpGet]
@@ -96,7 +100,7 @@ namespace Practic.Controllers
 
         #endregion
 
-        //Запросы Создание/Редактирование кабинета
+        //Запросы Создание/Редактирование кабинета/Удаление
         #region
         [Route("crtEssCR")]
         [HttpPost]
@@ -108,7 +112,7 @@ namespace Practic.Controllers
             if (context.classrooms.Any(x => x.Number == classroom.Number))
                 return BadRequest(new { errorText = "Кабинет с таким номером существует" });
 
-            context.classrooms.Add(new Classroom { Id = Guid.NewGuid().ToString(), Number = classroom.Number});
+            dbCR.Create(new Classroom { Id = Guid.NewGuid().ToString(), Number = classroom.Number});
             await context.SaveChangesAsync();
             return Ok(classroom);
         }
@@ -126,10 +130,23 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            context.Update(classroom);
+            dbCR.Update(classroom);
             await context.SaveChangesAsync();
 
             return Ok(classroom);
+        }
+
+        [Route("delEssCR")]
+        [HttpPost]
+        public async Task<IActionResult> DelCR(string id)
+        {
+            if (id != null)
+            {
+                dbCR.Delete(id);
+                await context.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
         }
         #endregion
 
@@ -183,7 +200,7 @@ namespace Practic.Controllers
         }
         #endregion
 
-        //Запросы Создание/Редактирование/Удаление предмета
+        //Запросы Создание/Редактирование/Удаление предмета [\/]
         #region
         [Route("crtEssSub")]
         [HttpPost]
@@ -195,7 +212,7 @@ namespace Practic.Controllers
             if (context.subjects.Any(x => x.Name == subject.Name))
                 return BadRequest(new { errorText = "Такой класс уже существует" });
 
-            context.subjects.Add(new Subject { Id = Guid.NewGuid().ToString(), Name = subject.Name});
+            dbS.Create(new Subject { Id = Guid.NewGuid().ToString(), Name = subject.Name});
             await context.SaveChangesAsync();
             return Ok(subject);
         }
@@ -208,12 +225,12 @@ namespace Practic.Controllers
             {
                 return BadRequest();
             }
-            if (!context.classes.Any(x => x.Id == subject.Id))
+            if (!context.subjects.Any(x => x.Id == subject.Id))
             {
                 return NotFound();
             }
 
-            context.Update(subject);
+            dbS.Update(subject);
             await context.SaveChangesAsync();
 
             return Ok(subject);
@@ -221,23 +238,19 @@ namespace Practic.Controllers
 
         [Route("delEssSub")]
         [HttpPost]
-        public async Task<IActionResult> Delete(Subject sub)
+        public async Task<IActionResult> DelSub(string id)
         {
-            if (sub != null)
+            if (id != null)
             {
-                Subject subject = await context.subjects.FirstOrDefaultAsync(p => p.Id == sub.Id);
-                if (subject != null)
-                {
-                    context.subjects.Remove(subject);
-                    await context.SaveChangesAsync();
-                    return Ok(subject);
-                }
+                dbS.Delete(id);
+                await context.SaveChangesAsync();
+                return Ok(id);
             }
             return NotFound();
         }
         #endregion
 
-        //Запроса Создание/Редактирование/Удаление расписания [\/]
+        //Запроса Создание/Редактирование/Удаление расписания [\?/]
         #region
         [Route("crtTt")]
         [HttpPost]

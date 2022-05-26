@@ -6,7 +6,7 @@ using Practic.Data;
 namespace Practic.Controllers
 {
     [Route("api/ht")]
-    [Authorize(Roles = "Администратор, Ученик, Родитель")]
+    [Authorize(Roles = "Admin, Student, Parent")]
     [ApiController]
     public class StudentAndParentController : ControllerBase
     {
