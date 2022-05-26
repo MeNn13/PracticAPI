@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Practic.Data;
+using Practic.Data.Interface;
+using Practic.Data.Repository;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +14,17 @@ using System.Threading.Tasks;
 namespace Practic.Controllers
 {
     [Route("api/ht")]
-    [Authorize(Roles = "Завуч, Администратор")]
+    [Authorize(Roles = "Head teacher, Admin")]
     [ApiController]
     public class HeadTeacherController : ControllerBase
     {
+        IRepository<User> dbU;
         ApplicationContext context;
+
         public HeadTeacherController(ApplicationContext _context)
         {
             context = _context;
+            dbU = new UserRepository(context);
         }
 
         [HttpGet]
@@ -34,21 +40,21 @@ namespace Practic.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
         {
-            return  await context.Users.ToListAsync();
+            return  await context.users.ToListAsync();
         }
 
         [Route("crtUser")]
         [HttpPost]
-        public async Task<ActionResult<User>> AddUser (User user)
+        public ActionResult AddUser (User user)
         {
             if (user == null)
                 return BadRequest();
 
-            if (context.Users.Any(x => x.Login == user.Login))
+            if (context.users.Any(x => x.Login == user.Login))
                 return BadRequest(new { errorText = "Пользователь с таким логином существует" });
 
-            context.Users.Add(new User { Id = Guid.NewGuid().ToString(), First_name = user.First_name, Midle_name = user.Midle_name, Last_name = user.Last_name, Role = user.Role, Login = user.Login, Password = "user"});
-            await context.SaveChangesAsync();
+            dbU.Create(new User { Id = Guid.NewGuid().ToString(), First_name = user.First_name, Midle_name = user.Midle_name, Last_name = user.Last_name, RoleId = user.RoleId, Login = user.Login, Password = "user"});
+            dbU.Save();
             return Ok(user);
         }
 
@@ -60,7 +66,7 @@ namespace Practic.Controllers
             {
                 return BadRequest();
             }
-            if (!context.Users.Any(x => x.Id == user.Id))
+            if (!context.users.Any(x => x.Id == user.Id))
             {
                 return NotFound();
             }
@@ -77,10 +83,10 @@ namespace Practic.Controllers
         {
             if (user != null)
             {
-                User us = await context.Users.FirstOrDefaultAsync(p => p.Id == user.Id);
+                User us = await context.users.FirstOrDefaultAsync(p => p.Id == user.Id);
                 if (us != null)
                 {
-                    context.Users.Remove(us);
+                    context.users.Remove(us);
                     await context.SaveChangesAsync();
                     return Ok(us);
                 }
@@ -136,10 +142,10 @@ namespace Practic.Controllers
             if (@class == null)
                 return BadRequest();
 
-            if (context.Classes.Any(x => x.Number == @class.Number && x.Letter == @class.Letter))
+            if (context.classes.Any(x => x.Number == @class.Number && x.Letter == @class.Letter))
                 return BadRequest(new { errorText = "Такой класс уже существует"});
 
-            context.Classes.Add(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
+            context.classes.Add(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
             await context.SaveChangesAsync();
             return Ok(@class);
         }
@@ -152,7 +158,7 @@ namespace Practic.Controllers
             {
                 return BadRequest();
             }
-            if (!context.Classes.Any(x => x.Id == @class.Id))
+            if (!context.classes.Any(x => x.Id == @class.Id))
             {
                 return NotFound();
             }
@@ -189,7 +195,7 @@ namespace Practic.Controllers
             {
                 return BadRequest();
             }
-            if (!context.Classes.Any(x => x.Id == subject.Id))
+            if (!context.classes.Any(x => x.Id == subject.Id))
             {
                 return NotFound();
             }

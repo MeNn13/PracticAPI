@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Practic.Data;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
@@ -49,13 +50,14 @@ namespace Practic.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            User user = context.Users.FirstOrDefault(x => x.Login == login && x.Password == password);
+            User user = context.users.FirstOrDefault(x => x.Login == login && x.Password == password);
+            Role userRole = context.roles.FirstOrDefault(r => r.Id == user.RoleId);
             if (user != null)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole.Name)
                 };
 
                 ClaimsIdentity claimsIdentity =
