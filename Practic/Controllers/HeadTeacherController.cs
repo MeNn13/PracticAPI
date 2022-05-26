@@ -133,7 +133,7 @@ namespace Practic.Controllers
         }
         #endregion
 
-        //Запросы Создание/Редактирование класса
+        //Запросы Создание/Редактирование/Удаление класса
         #region
         [Route("crtEssClass")]
         [HttpPost]
@@ -167,6 +167,23 @@ namespace Practic.Controllers
             await context.SaveChangesAsync();
 
             return Ok(@class);
+        }
+
+        [Route("delEssClacc")]
+        [HttpPost]
+        public async Task<IActionResult> DelClass(Class @class)
+        {
+            if (@class != null)
+            {
+                Class cl = await context.classes.FirstOrDefaultAsync(p => p.Id == @class.Id);
+                if (cl != null)
+                {
+                    context.classes.Remove(cl);
+                    await context.SaveChangesAsync();
+                    return Ok(cl);
+                }
+            }
+            return NotFound();
         }
         #endregion
 
