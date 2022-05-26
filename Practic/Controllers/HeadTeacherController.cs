@@ -19,12 +19,16 @@ namespace Practic.Controllers
     public class HeadTeacherController : ControllerBase
     {
         IRepository<User> dbU;
+        IRepository<Class> dbC;
+        IRepository<Timetable> dbT;
         ApplicationContext context;
 
         public HeadTeacherController(ApplicationContext _context)
         {
             context = _context;
             dbU = new UserRepository(context);
+            dbC = new ClassRepository(context);
+            dbT = new TimetableRepository(context);
         }
 
         [HttpGet]
@@ -33,7 +37,7 @@ namespace Practic.Controllers
             return Content("Создание пользователя('api/ht/crtUser'). Редактирование пользователя(api/ht/edtUser)");
         }
 
-        //Запросы Создание/Редактирование/Получение/Удаление пользователей
+        //Запросы Создание/Редактирование/Получение/Удаление пользователей [\/]
         #region
 
         [Route("all")]
@@ -71,7 +75,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            context.Update(user);
+            dbU.Update(user);
             await context.SaveChangesAsync();
 
             return Ok(user);
@@ -79,18 +83,14 @@ namespace Practic.Controllers
 
         [Route("delUser")]
         [HttpPost]
-        public async Task<IActionResult> Delete(User user)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (user != null)
+            if (id != null)
             {
-                User us = await context.users.FirstOrDefaultAsync(p => p.Id == user.Id);
-                if (us != null)
-                {
-                    context.users.Remove(us);
-                    await context.SaveChangesAsync();
-                    return Ok(us);
-                }
-            }
+                dbU.Delete(id);
+                await context.SaveChangesAsync();
+                return Ok();
+            }   
             return NotFound();
         }
 
@@ -133,7 +133,7 @@ namespace Practic.Controllers
         }
         #endregion
 
-        //Запросы Создание/Редактирование/Удаление класса
+        //Запросы Создание/Редактирование/Удаление класса [\/]
         #region
         [Route("crtEssClass")]
         [HttpPost]
@@ -145,7 +145,7 @@ namespace Practic.Controllers
             if (context.classes.Any(x => x.Number == @class.Number && x.Letter == @class.Letter))
                 return BadRequest(new { errorText = "Такой класс уже существует"});
 
-            context.classes.Add(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
+            dbC.Create(new Class { Id = Guid.NewGuid().ToString(), Number = @class.Number, Letter = @class .Letter});
             await context.SaveChangesAsync();
             return Ok(@class);
         }
@@ -163,7 +163,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            context.Update(@class);
+            dbC.Update(@class);
             await context.SaveChangesAsync();
 
             return Ok(@class);
@@ -171,17 +171,13 @@ namespace Practic.Controllers
 
         [Route("delEssClacc")]
         [HttpPost]
-        public async Task<IActionResult> DelClass(Class @class)
+        public async Task<IActionResult> DelClass(string id)
         {
-            if (@class != null)
+            if (id != null)
             {
-                Class cl = await context.classes.FirstOrDefaultAsync(p => p.Id == @class.Id);
-                if (cl != null)
-                {
-                    context.classes.Remove(cl);
-                    await context.SaveChangesAsync();
-                    return Ok(cl);
-                }
+                dbU.Delete(id);
+                await context.SaveChangesAsync();
+                return Ok();
             }
             return NotFound();
         }
@@ -236,6 +232,56 @@ namespace Practic.Controllers
                     await context.SaveChangesAsync();
                     return Ok(subject);
                 }
+            }
+            return NotFound();
+        }
+        #endregion
+
+        //Запроса Создание/Редактирование/Удаление расписания [\/]
+        #region
+        [Route("crtTt")]
+        [HttpPost]
+        public ActionResult AddTt(Timetable timetable)
+        {
+            if (timetable == null)
+                return BadRequest();
+
+            if (context.timetables.Any(x => x.Id == timetable.Id))
+                return BadRequest(new { errorText = "Такое расписание уже сушествует" });
+
+            dbT.Create(new Timetable { Id = Guid.NewGuid().ToString(), Class = timetable.Class, Classroom = timetable.Classroom, Date = timetable.Date, Lesson = timetable.Lesson, Subject = timetable.Subject, User = timetable.User});
+            dbT.Save();
+            return Ok(timetable);
+        }
+
+        [Route("edtTt")]
+        [HttpPut]
+        public async Task<ActionResult<User>> PutTt(Timetable timetable)
+        {
+            if (timetable == null)
+            {
+                return BadRequest();
+            }
+            if (!context.users.Any(x => x.Id == timetable.Id))
+            {
+                return NotFound();
+            }
+
+            dbT.Update(timetable);
+            await context.SaveChangesAsync();
+
+            return Ok(timetable);
+        }
+
+        [Route("delTt")]
+        [HttpPost]
+        public async Task<IActionResult> DelTt(string id)
+        {
+            if (id != null)
+            {
+                dbT.Delete(id);
+                await context.SaveChangesAsync();
+                return Ok();
             }
             return NotFound();
         }
