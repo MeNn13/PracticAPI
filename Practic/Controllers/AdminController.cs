@@ -13,8 +13,8 @@ namespace Practic.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        ApplicationContext context;
-        public AdminController(ApplicationContext _context)
+        ApplicationDbContext context;
+        public AdminController(ApplicationDbContext _context)
         {
             context = _context;
         }

@@ -4,7 +4,7 @@ using System;
 
 namespace Practic.Data
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<User> users { get; set; }
         public DbSet<Class> classes { get; set; }
@@ -13,7 +13,7 @@ namespace Practic.Data
         public DbSet<Subject> subjects { get; set; }
         public DbSet<Role> roles { get; set; }
 
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

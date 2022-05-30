@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Practic.Data;
 using Practic.Data.Interface;
+using Practic.Data;
 using Practic.Data.Repository;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Practic.Data.Interfaces;
 
 namespace Practic.Controllers
 {
@@ -18,27 +18,22 @@ namespace Practic.Controllers
     [ApiController]
     public class HeadTeacherController : ControllerBase
     {
-        IRepository<User> dbU;
+        IUserRepository dbU;
         IRepository<Class> dbC;
         IRepository<Timetable> dbT;
         IRepository<Subject> dbS;
         IRepository<Classroom> dbCR;
-        ApplicationContext context;
+        ApplicationDbContext context;
 
-        public HeadTeacherController(ApplicationContext _context)
+        public HeadTeacherController(IUserRepository userRepository)
         {
-            context = _context;
-            dbU = new UserRepository(context);
-            dbC = new ClassRepository(context);
-            dbT = new TimetableRepository(context);
-            dbS = new SubjectRepository(context);
-            dbCR = new ClassroomRepository(context);
+            dbU = userRepository;
         }
 
         [HttpGet]
         public IActionResult Info ()
         {
-            return Content("Создание пользователя('api/ht/crtUser'). Редактирование пользователя(api/ht/edtUser)");
+            return Content("Добро пожаловать на страницу завуча");
         }
 
         //Запросы Создание/Редактирование/Получение/Удаление пользователей [\/]
@@ -48,7 +43,7 @@ namespace Practic.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAll()
         {
-            return  await context.users.ToListAsync();
+            return await dbU.GetAll();
         }
 
         [Route("crtUser")]
@@ -62,7 +57,7 @@ namespace Practic.Controllers
                 return BadRequest(new { errorText = "Пользователь с таким логином существует" });
 
             dbU.Create(new User { Id = Guid.NewGuid().ToString(), First_name = user.First_name, Midle_name = user.Midle_name, Last_name = user.Last_name, RoleId = user.RoleId, Login = user.Login, Password = "user"});
-            dbU.Save();
+            //dbU.Save();
             return Ok(user);
         }
 
@@ -79,7 +74,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            dbU.Update(user);
+           // dbU.Update(user);
             await context.SaveChangesAsync();
 
             return Ok(user);
@@ -100,7 +95,7 @@ namespace Practic.Controllers
 
         #endregion
 
-        //Запросы Создание/Редактирование кабинета/Удаление
+        //Запросы Создание/Редактирование кабинета/Удаление [\/]
         #region
         [Route("crtEssCR")]
         [HttpPost]
@@ -130,7 +125,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            dbCR.Update(classroom);
+            //dbCR.Update(classroom);
             await context.SaveChangesAsync();
 
             return Ok(classroom);
@@ -180,7 +175,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            dbC.Update(@class);
+            //dbC.Update(@class);
             await context.SaveChangesAsync();
 
             return Ok(@class);
@@ -230,7 +225,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            dbS.Update(subject);
+            //dbS.Update(subject);
             await context.SaveChangesAsync();
 
             return Ok(subject);
@@ -263,7 +258,7 @@ namespace Practic.Controllers
                 return BadRequest(new { errorText = "Такое расписание уже сушествует" });
 
             dbT.Create(new Timetable { Id = Guid.NewGuid().ToString(), Class = timetable.Class, Classroom = timetable.Classroom, Date = timetable.Date, Lesson = timetable.Lesson, Subject = timetable.Subject, User = timetable.User});
-            dbT.Save();
+            //dbT.Save();
             return Ok(timetable);
         }
 
@@ -280,7 +275,7 @@ namespace Practic.Controllers
                 return NotFound();
             }
 
-            dbT.Update(timetable);
+            //dbT.Update(timetable);
             await context.SaveChangesAsync();
 
             return Ok(timetable);

@@ -10,8 +10,8 @@ namespace Practic.Controllers
     [ApiController]
     public class StudentAndParentController : ControllerBase
     {
-        ApplicationContext context;
-        public StudentAndParentController (ApplicationContext _context)
+        ApplicationDbContext context;
+        public StudentAndParentController (ApplicationDbContext _context)
         {
             context = _context;
         }

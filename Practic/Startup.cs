@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Practic.Data;
+using Practic.Data.Interfaces;
+using Practic.Data.Repository;
 
 namespace Practic
 {
@@ -12,8 +14,7 @@ namespace Practic
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            services.AddDbContext<ApplicationContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -21,25 +22,24 @@ namespace Practic
                         options.RequireHttpsMetadata = false;
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            // укзывает, будет ли валидироваться издатель при валидации токена
                             ValidateIssuer = true,
-                            // строка, представляющая издателя
+
                             ValidIssuer = AuthOptions.ISSUER,
 
-                            // будет ли валидироваться потребитель токена
                             ValidateAudience = true,
-                            // установка потребителя токена
+
                             ValidAudience = AuthOptions.AUDIENCE,
-                            // будет ли валидироваться время существования
+
                             ValidateLifetime = true,
 
-                            // установка ключа безопасности
                             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                            // валидация ключа безопасности
+
                             ValidateIssuerSigningKey = true,
                         };
                     });
             services.AddControllersWithViews();
+
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         public void Configure(IApplicationBuilder app)

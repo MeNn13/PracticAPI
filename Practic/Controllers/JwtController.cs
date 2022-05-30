@@ -15,8 +15,8 @@ namespace Practic.Controllers
     [ApiController]
     public class JwtController : ControllerBase
     {
-        ApplicationContext context;
-        public JwtController(ApplicationContext _context)
+        ApplicationDbContext context;
+        public JwtController(ApplicationDbContext _context)
         {
             context = _context;
         }
