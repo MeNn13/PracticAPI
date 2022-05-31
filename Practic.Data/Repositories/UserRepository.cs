@@ -18,24 +18,32 @@ namespace Practic.Data.Repository
             _context = context;
         }
 
-        public bool Create(User item)
+        public async Task<bool> Create(User item)
         {
-            throw new NotImplementedException();
+            User user = await _context.users.FirstOrDefaultAsync(x => x.Login == item.Login);
+
+            if (user != null)
+                return false;
+
+            await _context.AddAsync(new User { Id = Guid.NewGuid().ToString(), First_name = item.First_name, Midle_name = item.Midle_name, Last_name = item.Last_name, Login = item.Login, Password = item.Password, RoleId = item.RoleId});
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public bool Delete(string id)
+        public async Task<bool> Delete(User item)
         {
-            throw new NotImplementedException();
+            //User user = _context.users.FirstOrDefault(x => x.Id == item.Id);
+            //if (user == null)
+            //    return false;
+
+            _context.users.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public void Dispose()
+        public async Task<User> Get(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public User Get(string id)
-        {
-            throw new NotImplementedException();
+            return await _context.users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<List<User>> GetAll()
@@ -46,6 +54,26 @@ namespace Practic.Data.Repository
         public void Update(User item)
         {
             throw new NotImplementedException();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Practic
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserRepository, UserRepository>();
+
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
 
@@ -38,8 +40,6 @@ namespace Practic
                         };
                     });
             services.AddControllersWithViews();
-
-            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         public void Configure(IApplicationBuilder app)

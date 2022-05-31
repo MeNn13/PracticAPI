@@ -26,6 +26,11 @@ namespace Practic.Data.Repository
             throw new NotImplementedException();
         }
 
+        public Task<bool> Delete(Subject id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -37,6 +42,17 @@ namespace Practic.Data.Repository
         }
 
         public Task<List<Subject>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IRepository<Subject>.Create(Subject item)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        Task<Subject> IRepository<Subject>.Get(string id)
         {
             throw new NotImplementedException();
         }

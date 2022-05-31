@@ -9,11 +9,11 @@ namespace Practic.Data.Interface
     {
         Task<List<T>> GetAll();
 
-        T Get(string id);
+        Task<T> Get(string id);
 
-        bool Create(T item);
+        Task<bool> Create(T item);
 
-        bool Delete(string id);
+        Task<bool> Delete(T id);
 
     }
 }
