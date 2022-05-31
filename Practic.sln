@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practic.Domain", "Practic.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{E90E7E6F-D463-4F91-9F96-AF11E62939E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practic.Data", "Practic.Data\Practic.Data.csproj", "{C87889AA-2A2A-49A8-B227-30931C123146}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practic.Data", "Practic.Data\Practic.Data.csproj", "{C87889AA-2A2A-49A8-B227-30931C123146}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{164AB160-6FC8-4AC4-B971-E856756AF66B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practic.Service", "Practic.Service\Practic.Service.csproj", "{A16754BF-D4E4-47AB-A9AB-AF41F4610B33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,10 @@ Global
 		{C87889AA-2A2A-49A8-B227-30931C123146}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C87889AA-2A2A-49A8-B227-30931C123146}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C87889AA-2A2A-49A8-B227-30931C123146}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A16754BF-D4E4-47AB-A9AB-AF41F4610B33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A16754BF-D4E4-47AB-A9AB-AF41F4610B33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A16754BF-D4E4-47AB-A9AB-AF41F4610B33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A16754BF-D4E4-47AB-A9AB-AF41F4610B33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +46,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3217E9C8-7A5B-4ECA-A6E3-2593B0001B9F} = {5E010BC5-3A12-4EAC-ACEE-4DA484541F3D}
 		{C87889AA-2A2A-49A8-B227-30931C123146} = {E90E7E6F-D463-4F91-9F96-AF11E62939E3}
+		{A16754BF-D4E4-47AB-A9AB-AF41F4610B33} = {164AB160-6FC8-4AC4-B971-E856756AF66B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4C3016C7-9261-4D8F-9B50-E91EB35FDC24}
