@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Practic.Data.Interfaces;
+using Practic.Domain.ViewModels.User;
 using Practic.Models;
+using Practic.Service.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,43 +12,49 @@ namespace Practic.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         [HttpGet("all")]
         [Authorize(Roles = "Head teacher, Admin")]
-        public async Task<List<User>> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _userRepository.GetAll();
+            var responce = await _userService.GetUsers();
+            return responce.Data;
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Head teacher, Admin")]
-        public async Task<User> Get (string id)
+        public async Task<User> Get(string id)
         {
-            return await _userRepository.Get(id);
+            var responce = await _userService.Get(id);
+            return responce.Data;
         }
 
-        [HttpPost("crt")]
+        [HttpPost("save")]
         [Authorize(Roles = "Head teacher, Admin")]
-        public async Task<IActionResult> Create (User user)
+        public async Task<IActionResult> SaveUser(UserViewModel userViewModel)
         {
-            if (await _userRepository.Create(user))
-                return Ok("User added");
-            return BadRequest("The login exists");
+            if (ModelState.IsValid)
+                if (userViewModel.Id == null)
+                    await _userService.Create(userViewModel);
+                else
+                    await _userService.Update(userViewModel.Id, userViewModel);
+
+            return Ok("ready");    
         }
 
         [HttpDelete]
         [Authorize(Roles = "Head teacher, Admin")]
-        public async Task<IActionResult> Delete(User user)
+        public async Task<IActionResult> Delete(string id)
         {
-            if(await _userRepository.Delete(user))
-                return Ok("User deleted");
-            return BadRequest("There is no such user");
+            var responce = await _userService.Delete(id);
+
+            return Ok("User deleted");
         }
     }
 }

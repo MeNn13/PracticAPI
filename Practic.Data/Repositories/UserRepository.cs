@@ -1,10 +1,8 @@
 ﻿ using Microsoft.EntityFrameworkCore;
-using Practic.Data.Interface;
 using Practic.Data.Interfaces;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Practic.Data.Repository
@@ -20,22 +18,13 @@ namespace Practic.Data.Repository
 
         public async Task<bool> Create(User item)
         {
-            User user = await _context.users.FirstOrDefaultAsync(x => x.Login == item.Login);
-
-            if (user != null)
-                return false;
-
-            await _context.AddAsync(new User { Id = Guid.NewGuid().ToString(), First_name = item.First_name, Midle_name = item.Midle_name, Last_name = item.Last_name, Login = item.Login, Password = item.Password, RoleId = item.RoleId});
+            await _context.AddAsync(item);
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> Delete(User item)
         {
-            //User user = _context.users.FirstOrDefault(x => x.Id == item.Id);
-            //if (user == null)
-            //    return false;
-
             _context.users.Remove(item);
             await _context.SaveChangesAsync();
             return true;
@@ -49,11 +38,6 @@ namespace Practic.Data.Repository
         public Task<List<User>> GetAll()
         {
             return _context.users.ToListAsync();
-        }
-
-        public void Update(User item)
-        {
-            throw new NotImplementedException();
         }
 
         private bool disposed = false;
@@ -74,6 +58,18 @@ namespace Practic.Data.Repository
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<User> Update(User item)
+        {
+            _context.users.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<User> GetLogin(string login)
+        {
+            return await _context.users.FirstOrDefaultAsync(x => x.Login == login);
         }
     }
 }

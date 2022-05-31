@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Implementations\" />
+    <ProjectReference Include="..\Practic.Data\Practic.Data.csproj" />
+    <ProjectReference Include="..\Practic.Domain\Practic.Domain.csproj" />
   </ItemGroup>
 
 </Project>

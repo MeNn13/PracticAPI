@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Practic.Data;
 using Practic.Data.Interfaces;
 using Practic.Data.Repository;
+using Practic.Service.Implementations;
+using Practic.Service.Interfaces;
 
 namespace Practic
 {
@@ -13,9 +15,6 @@ namespace Practic
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, UserRepository>();
-
-
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=api;Username=postgres;Password=Crazy5;"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -40,6 +39,9 @@ namespace Practic
                         };
                     });
             services.AddControllersWithViews();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app)

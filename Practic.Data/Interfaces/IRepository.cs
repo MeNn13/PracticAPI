@@ -15,5 +15,6 @@ namespace Practic.Data.Interface
 
         Task<bool> Delete(T id);
 
+        Task<T> Update(T item);
     }
 }

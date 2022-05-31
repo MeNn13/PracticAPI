@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Practic.Data\Practic.Data.csproj" />
     <ProjectReference Include="..\Practic.Domain\Practic.Domain.csproj" />
+    <ProjectReference Include="..\Practic.Service\Practic.Service.csproj" />
   </ItemGroup>
 
 </Project>

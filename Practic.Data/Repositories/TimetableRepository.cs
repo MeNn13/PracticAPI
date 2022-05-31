@@ -46,6 +46,11 @@ namespace Practic.Data.Repository
             throw new NotImplementedException();
         }
 
+        public Task<Timetable> Update(Timetable item)
+        {
+            throw new NotImplementedException();
+        }
+
         Task<bool> IRepository<Timetable>.Create(Timetable item)
         {
             throw new NotImplementedException();

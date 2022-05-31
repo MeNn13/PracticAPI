@@ -46,6 +46,11 @@ namespace Practic.Data.Repository
             throw new NotImplementedException();
         }
 
+        public Task<Class> Update(Class item)
+        {
+            throw new NotImplementedException();
+        }
+
         Task<bool> IRepository<Class>.Create(Class item)
         {
             throw new NotImplementedException();
