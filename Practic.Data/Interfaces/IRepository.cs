@@ -13,7 +13,7 @@ namespace Practic.Data.Interface
 
         Task<bool> Create(T item);
 
-        Task<bool> Delete(T id);
+        Task<bool> Delete(T item);
 
         Task<T> Update(T item);
     }

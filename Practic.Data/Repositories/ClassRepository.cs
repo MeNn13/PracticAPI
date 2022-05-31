@@ -16,49 +16,55 @@ namespace Practic.Data.Repository
             _context = context;
         }
 
-        public bool Create(Class item)
+        public async Task<bool> Create(Class item)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public bool Delete(string id)
+        public async Task<bool> Delete(Class item)
         {
-            throw new NotImplementedException();
+            _context.classes.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> Delete(Class id)
+        public async Task<Class> Get(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Class Get(string id)
-        {
-            throw new NotImplementedException();
+            return await _context.classes.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<List<Class>> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.classes.ToListAsync();
         }
 
-        public Task<Class> Update(Class item)
+        public async Task<Class> Update(Class item)
         {
-            throw new NotImplementedException();
+            _context.classes.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
         }
 
-        Task<bool> IRepository<Class>.Create(Class item)
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
 
-        Task<Class> IRepository<Class>.Get(string id)
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

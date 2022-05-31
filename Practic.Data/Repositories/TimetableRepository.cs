@@ -16,50 +16,55 @@ namespace Practic.Data.Repository
             _context = context;
         }
 
-        public bool Create(Timetable item)
+        public async Task<bool> Create(Timetable item)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public bool Delete(string id)
+        public async Task<bool> Delete(Timetable item)
         {
-            throw new NotImplementedException();
+            _context.timetables.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> Delete(Timetable id)
+        public async Task<Timetable> Get(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Timetable Get(string id)
-        {
-            throw new NotImplementedException();
+            return await _context.timetables.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<List<Timetable>> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.timetables.ToListAsync();
         }
 
-        public Task<Timetable> Update(Timetable item)
+        public async Task<Timetable> Update(Timetable item)
         {
-            throw new NotImplementedException();
+            _context.timetables.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
         }
 
-        Task<bool> IRepository<Timetable>.Create(Timetable item)
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
 
-
-        Task<Timetable> IRepository<Timetable>.Get(string id)
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

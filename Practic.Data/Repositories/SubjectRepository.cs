@@ -16,50 +16,55 @@ namespace Practic.Data.Repository
             _context = context;
         }
 
-        public bool Create(Subject item)
+        public async Task<bool> Create(Subject item)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public bool Delete(string id)
+        public async Task<bool> Delete(Subject item)
         {
-            throw new NotImplementedException();
+            _context.subjects.Remove(item);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<bool> Delete(Subject id)
+        public async Task<Subject> Get(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Subject Get(string id)
-        {
-            throw new NotImplementedException();
+            return await _context.subjects.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<List<Subject>> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.subjects.ToListAsync();
         }
 
-        public Task<Subject> Update(Subject item)
+        public async Task<Subject> Update(Subject item)
         {
-            throw new NotImplementedException();
+            _context.subjects.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
         }
 
-        Task<bool> IRepository<Subject>.Create(Subject item)
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
         {
-            throw new NotImplementedException();
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
 
-
-        Task<Subject> IRepository<Subject>.Get(string id)
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
