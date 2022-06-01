@@ -12,12 +12,14 @@ namespace Practic
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClassRepository, ClassRepository>();
+            services.AddScoped<IClassroomRepository, ClassroomRepository>();
         }
 
         public static void InitializeServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<IClassroomService, ClassroomService>();
         }
     }
 }
