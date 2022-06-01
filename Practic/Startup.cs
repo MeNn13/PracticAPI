@@ -40,8 +40,8 @@ namespace Practic
                     });
             services.AddControllersWithViews();
 
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
+            services.InitializeRepositories();
+            services.InitializeServices();
         }
 
         public void Configure(IApplicationBuilder app)
