@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Practic.Data.Interface;
+using Practic.Data.Interfaces;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Practic.Data.Repository
 {
-    public class SubjectRepository : IRepository<Subject>
+    public class SubjectRepository : ISubjectRepository
     {
         private ApplicationDbContext _context;
 
@@ -65,6 +65,11 @@ namespace Practic.Data.Repository
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<Subject> GetName(string subject)
+        {
+            return await _context.subjects.FirstOrDefaultAsync(s => s.Name == subject);
         }
     }
 }

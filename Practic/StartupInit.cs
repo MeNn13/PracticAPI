@@ -13,6 +13,7 @@ namespace Practic
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
         }
 
         public static void InitializeServices(this IServiceCollection services)
@@ -20,6 +21,7 @@ namespace Practic
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IClassroomService, ClassroomService>();
+            services.AddScoped<ISubjectService, SubjectService>();
         }
     }
 }
