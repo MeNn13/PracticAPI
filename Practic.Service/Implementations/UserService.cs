@@ -76,7 +76,7 @@ namespace Practic.Service.Implementations
 
                 return baseResponce;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseResponce<bool>()
                 {
@@ -104,7 +104,7 @@ namespace Practic.Service.Implementations
                 baseResponce.Data = user;
                 return baseResponce;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseResponce<User>()
                 {
@@ -134,13 +134,13 @@ namespace Practic.Service.Implementations
 
                 return baseResponce;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BaseResponce<IEnumerable<User>>()
                 {
                     Description = $"[GetUsers] : {ex.Message}",
                     StatusCode = StatusCode.InternalServerError
-        };
+                };
             }
         }
 

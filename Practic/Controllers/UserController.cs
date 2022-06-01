@@ -45,14 +45,14 @@ namespace Practic.Controllers
                 else
                     await _userService.Update(userViewModel.Id, userViewModel);
 
-            return Ok("ready");    
+            return Ok();    
         }
 
         [HttpDelete]
         [Authorize(Roles = "Head teacher, Admin")]
         public async Task<IActionResult> Delete(string id)
         {
-            var responce = await _userService.Delete(id);
+            await _userService.Delete(id);
 
             return Ok("User deleted");
         }

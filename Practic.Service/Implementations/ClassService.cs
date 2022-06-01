@@ -1,4 +1,4 @@
-﻿using Practic.Data.Interface;
+﻿using Practic.Data.Interfaces;
 using Practic.Domain.Enum;
 using Practic.Domain.Responce;
 using Practic.Models;
@@ -11,11 +11,11 @@ namespace Practic.Service.Implementations
 {
     public class ClassService : IClassService
     {
-        private readonly IRepository<Class> _repository;
+        private readonly IClassRepository _classRepository;
 
-        public ClassService(IRepository<Class> repository)
+        public ClassService(IClassRepository classRepository)
         {
-            _repository = repository;
+            _classRepository = classRepository;
         }
 
         public async Task<IBaseResponce<Class>> Create(Class @class)
@@ -24,7 +24,7 @@ namespace Practic.Service.Implementations
 
             try
             {
-                var classId = await _repository.Get(@class.Id);
+                var classId = await _classRepository.GetClass(@class);
 
                 if (classId == null)
                 {
@@ -35,7 +35,7 @@ namespace Practic.Service.Implementations
                         Letter = @class.Letter
                     };
 
-                    await _repository.Create(cls);
+                    await _classRepository.Create(cls);
                 }
 
                 baseResponce.Description = "The class exists";
@@ -58,7 +58,7 @@ namespace Practic.Service.Implementations
 
             try
             {
-                var @class = await _repository.Get(id);
+                var @class = await _classRepository.Get(id);
 
                 if (@class == null)
                 {
@@ -67,7 +67,7 @@ namespace Practic.Service.Implementations
                     return baseResponce;
                 }
 
-                await _repository.Delete(@class);
+                await _classRepository.Delete(@class);
 
                 return baseResponce;
             }
@@ -81,19 +81,93 @@ namespace Practic.Service.Implementations
             }
         }
 
-        public Task<IBaseResponce<Class>> Get(string id)
+        public async Task<IBaseResponce<Class>> Get(string id)
         {
-            throw new NotImplementedException();
+            var baseResponce = new BaseResponce<Class>();
+
+            try
+            {
+                var @class = await _classRepository.Get(id);
+
+                if (@class == null)
+                {
+                    baseResponce.Description = "Class not found";
+                    baseResponce.StatusCode = StatusCode.NotFound;
+                    return baseResponce;
+                }
+
+                baseResponce.Data = @class;
+                return baseResponce;
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponce<Class>()
+                {
+                    Description = $"[GetClass] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
         }
 
-        public Task<IBaseResponce<IEnumerable<Class>>> GetClasses()
+        public async Task<IBaseResponce<IEnumerable<Class>>> GetClasses()
         {
-            throw new NotImplementedException();
+            var baseResponce = new BaseResponce<IEnumerable<Class>>();
+
+            try
+            {
+                var classes = await _classRepository.GetAll();
+
+                if (classes.Count == 0)
+                {
+                    baseResponce.Description = "Найдено 0 элементов";
+                    baseResponce.StatusCode = StatusCode.NotFound;
+                    return baseResponce;
+                }
+
+                baseResponce.Data = classes;
+                baseResponce.StatusCode = StatusCode.OK;
+
+                return baseResponce;
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponce<IEnumerable<Class>>()
+                {
+                    Description = $"[GetClasses] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
         }
 
-        public Task<IBaseResponce<Class>> Update(string id, Class @class)
+        public async Task<IBaseResponce<Class>> Update(string id, Class model)
         {
-            throw new NotImplementedException();
+            var baseResponce = new BaseResponce<Class>();
+
+            try
+            {
+                var cls = await _classRepository.Get(id);
+                if (cls == null)
+                {
+                    baseResponce.Description = "Class not found";
+                    baseResponce.StatusCode = StatusCode.NotFound;
+                    return baseResponce;
+                }
+
+                cls.Letter = model.Letter;
+                cls.Number = model.Number;
+
+                await _classRepository.Update(cls);
+
+                return baseResponce;
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponce<Class>()
+                {
+                    Description = $"[UpdateClass] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
         }
     }
 }

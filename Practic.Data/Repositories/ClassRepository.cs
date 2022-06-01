@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Practic.Data.Interface;
+using Practic.Data.Interfaces;
+using Practic.Domain.ViewModels;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Practic.Data.Repository
 {
-    public class ClassRepository : IRepository<Class>
+    public class ClassRepository : IClassRepository
     {
         private ApplicationDbContext _context;
 
@@ -65,6 +66,11 @@ namespace Practic.Data.Repository
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<Class> GetClass(Class @class)
+        {
+            return await _context.classes.FirstOrDefaultAsync(c => c.Number == @class.Number && c.Letter == @class.Letter);
         }
     }
 }

@@ -11,6 +11,6 @@ namespace Practic.Service.Interfaces
         Task<IBaseResponce<Class>> Get(string id);
         Task<IBaseResponce<Class>> Create(Class @class);
         Task<IBaseResponce<bool>> Delete(string id);
-        Task<IBaseResponce<Class>> Update(string id, Class @class);
+        Task<IBaseResponce<Class>> Update(string id, Class model);
     }
 }
