@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Practic.Data.Interface;
+using Practic.Data.Interfaces;
+using Practic.Domain.ViewModels;
 using Practic.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Practic.Data.Repository
 {
-    public class TimetableRepository : IRepository<Timetable>
+    public class TimetableRepository : ITimetableRepository
     {
         private ApplicationDbContext _context;
 
@@ -65,6 +66,18 @@ namespace Practic.Data.Repository
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<Timetable> GetDate(TimetableViewModel model)
+        {
+            string dateM = model.Date.ToShortDateString();
+
+            return await _context.timetables.FirstOrDefaultAsync(t => t.Date == dateM && t.Lesson == model.Lesson);
+        }
+
+        public async Task<Timetable> GetTimetableClass(ClassViewModel @class)
+        {
+            return await _context.timetables.FirstOrDefaultAsync(t => t.Class == @class.Number.ToString() + @class.Letter);
         }
     }
 }

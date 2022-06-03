@@ -5,6 +5,7 @@
         OK = 200,
         InternalServerError = 500,
         NotFound = 404,
-        Exists = 0
+        Exists = 0,
+        BadRequest = 400
     }
 }

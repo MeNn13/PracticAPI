@@ -48,7 +48,7 @@ namespace Practic.Controllers
             return Ok();    
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Head teacher, Admin")]
         public async Task<IActionResult> Delete(string id)
         {
